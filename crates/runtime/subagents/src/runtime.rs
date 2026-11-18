@@ -641,11 +641,11 @@ pub struct Registry {
     scope_locks: Atom<HashMap<String, Arc<ScopeLocks>>>,
     store: Atom<Option<Arc<dyn SubagentStore>>>,
 
-    journals: Atom<HashMap<String, Arc<dyn SubagentStore>>>,
+    journals: Atom<nanocode_sync::Map<String, Arc<dyn SubagentStore>>>,
 
     claims: Atom<JournalClaims>,
 
-    spawn_admission: Atom<HashMap<String, Sequencer>>,
+    spawn_admission: Atom<nanocode_sync::Map<String, Sequencer>>,
     journal_writer: std::sync::atomic::AtomicBool,
 
     journal_writers: Atom<HashMap<String, mpsc::UnboundedSender<JournalRequest>>>,
@@ -695,8 +695,8 @@ pub struct Registry {
 
 #[derive(Clone, Default)]
 struct JournalClaims {
-    restored: HashMap<String, RestorationOutcome>,
-    reserved: HashMap<String, nanocode_agent_core::backend::ChildJournal>,
+    restored: nanocode_sync::Map<String, RestorationOutcome>,
+    reserved: nanocode_sync::Map<String, nanocode_agent_core::backend::ChildJournal>,
 }
 
 pub type ParentResolver = Arc<dyn Fn(&str) -> Option<Agent> + Send + Sync>;
